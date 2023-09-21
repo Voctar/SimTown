@@ -35,6 +35,20 @@ int main( int argc, char ** argv){
 		street[ib] = new Building(ib);
 	}
 
+	// Resize street
+	{
+	Building** bigger_street = new Building*[size+1];
+	for (int i=0; i<size; i++){
+		bigger_street[i] = street[i]; 
+	}
+	delete[] street;
+	street = bigger_street;
+	}	
+	street[size] = new Building(1000);
+	size++;
+	
+	
+	
 	for (int i=0; i<size ; ++i){
 		if(street[i] != nullptr){
 			street[i]->print(std::cout);
