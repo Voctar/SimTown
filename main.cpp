@@ -59,9 +59,7 @@ class Building{
 		Building(const Building& rhs): id_(rhs.id_), nb_storeys_(rhs.nb_storeys_){
 			std::cout << "Building::Building(rhs =  "<< &rhs << ", id_ = " <<rhs.id_<<" ) at " << this << std::endl;;
 			storeys_ = new Storey[nb_storeys_];
-			for(int i=0; i<nb_storeys_; i++){
-				storeys_[i] = rhs.storeys_[i];
-			}
+			clone_storeys(storeys_, rhs.storeys_, rhs.nb_storeys_);
 		}
 
 		~Building(){
@@ -78,9 +76,7 @@ class Building{
 					storeys_ = new Storey[rhs.nb_storeys_];
 				}	
 				nb_storeys_ = rhs.nb_storeys_;
-				for(int i=0; i<nb_storeys_; i++){
-					storeys_[i] = rhs.storeys_[i];
-				}
+				clone_storeys(storeys_, rhs.storeys_, rhs.nb_storeys_);
 			}
 			return *this;
 		}
@@ -89,6 +85,14 @@ class Building{
 			out << "Building " << id_ << " at " << this << std::endl;
 		}
 		
+		Storey* create_and_add_storey(){
+			Storey* new_storeys = new Storey[nb_storeys_+1];
+			clone_storeys(new_storeys, storeys_, nb_storeys_);
+			delete[] storeys_;
+			storeys_ = new_storeys;
+			nb_storeys_++;
+			return &storeys_[nb_storeys_-1];
+		}	
 		// FONCTION rajoutant etage au bilduing et renvoie l'adresse de l'étage qu'elle vient d'ajouter Storey* create_and_add_storey()
 		// nouvelle version avec réorganisation en différents fichiers Storey.h, Storey.cpp, Building.h, Building.cpp, SimTown.cpp
 
@@ -96,6 +100,12 @@ class Building{
 		int id_;
 		Storey* storeys_;
 		int nb_storeys_;
+		void clone_storeys(Storey* storeys, Storey* other_storeys, int other_storeys_lengh){   // other_storeys_lengh should be <= storeys lengh (assert later ?)
+			for(int i=0; i<other_storeys_lengh; i++){
+				storeys[i] = other_storeys[i];
+			}
+		}
+
 };
 
 
@@ -129,7 +139,9 @@ int main( int argc, char ** argv){
 	for (int i=0; i<size ; ++i){
 			street[i].print(std::cout);
 	}
-
+//	Storey* new_storey_city_hall=street[size-1].create_and_add_storey();
+//	std::cout <<"000000000000000000000000000000000000000000000000000000000000000000000000000000000000   "<<*new_storey_city_hall<<std::endl;
+//	street[size-1].print(std::cout);
 	delete[] street;
 	std::cout<<"Done" << std::endl;
 	return 0; // Normal termination
