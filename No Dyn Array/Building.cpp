@@ -40,6 +40,7 @@ Building& Building::operator = (const Building& rhs){
 }
 
 
+
 Storey* Building::create_and_add_storey(){
 	Storey* new_storeys = new Storey[nb_storeys_+1];
 	clone_storeys(new_storeys, storeys_);
